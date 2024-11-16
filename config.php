@@ -1,14 +1,15 @@
 <?php
-	define('HOST', 'localhost');
-	define('USER', 'root');
-	define('PASS', '');
-	define('BASE', 'clinicasysbd');
+define('HOST', 'localhost');
+define('USER', 'root');
+define('PASS', '');
+define('BASE', 'clinicasysbd');
 
-	$conn = new MySQLi(HOST,USER,PASS,BASE);
+$conn = new MySQLi(HOST, USER, PASS, BASE);
 
-	if($conn==true){
-		print "Conexão realizada com sucesso";
-	}else{
-		print "Não conectou";
-	}
 
+if ($conn->connect_error) {
+    
+    error_log("Erro de conexão: " . $conn->connect_error);
+    exit; 
+}
+?>

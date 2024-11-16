@@ -48,6 +48,9 @@
 	            <li><a class="dropdown-item" href="?page=listar-consulta">Listar</a></li>
 	          </ul>
 	        </li>
+			<li class="nav-item">
+	          <a class="nav-link active" aria-current="page" href="prontuario-medico.php">Prontuário Médico</a>
+	        </li>
 	        
 	      </ul>
 	      <form class="d-flex" role="search">
