@@ -107,6 +107,12 @@
 						case 'salvar-consulta':
 							include('salvar-consulta.php');
 							break;
+						case 'prontuario-medico':
+							include('prontuario-medico.php');
+							break;
+						case 'listar-prontuario':
+							include('listar-prontuario.php');
+							break;
 						
 						default:
 							include('home.php');

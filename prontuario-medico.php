@@ -19,7 +19,7 @@ session_start();
     <label for="paciente_nome">Nome do Paciente</label>
     <input type="text" id="paciente_nome" name="paciente_nome" class="form-control" placeholder="Digite o nome do paciente" onkeyup="buscarPacientes()" required>
     <select id="paciente_dropdown" name="paciente_dropdown" class="form-control mt-2" style="display: none;" onchange="selecionarPaciente()">
-        <!-- Pacientes serão carregados dinamicamente aqui -->
+        
     </select>
 </div>
 
@@ -35,7 +35,7 @@ session_start();
         }
         
         // Fazendo a requisição ao script PHP usando fetch
-        fetch(`buscar-paciente.php?nome_paciente=${encodeURIComponent(nomePaciente)}`)
+        fetch(`buscar-paciente-prontuario.php?nome_paciente=${encodeURIComponent(nomePaciente)}`)
             .then(response => response.json())
             .then(data => {
                 if (data.length > 0) {
@@ -62,46 +62,50 @@ session_start();
     function selecionarPaciente() {
         const dropdown = document.getElementById('paciente_dropdown');
         const pacienteNomeInput = document.getElementById('paciente_nome');
+        const pacienteIdInput = document.getElementById('id_paciente');
 
         // Atualiza o campo de texto com o nome selecionado no dropdown
         pacienteNomeInput.value = dropdown.value;
+        pacienteIdInput.value = dropdown.value;
         dropdown.style.display = 'none';
     }
 </script>
 
             <div class="form-group mb-3">
-                <label for="symptoms">Sintomas</label>
-                <textarea id="symptoms" name="symptoms" class="form-control" rows="4" required></textarea>
+                <input type="hidden" id="id_paciente" name="id_paciente">
+                <label for="sintomas">Sintomas</label>
+                <textarea id="sintomas" name="sintomas" class="form-control" rows="4" required></textarea>
             </div>
             <div class="form-group mb-3">
-                <label for="diagnosis">Diagnóstico</label>
-                <textarea id="diagnosis" name="diagnosis" class="form-control" rows="4" required></textarea>
+                <label for="diagnostico">Diagnóstico</label>
+                <textarea id="diagnostico" name="diagnostico" class="form-control" rows="4" required></textarea>
             </div>
             <div class="form-group mb-3">
-                <label for="medications">Medicamentos</label>
-                <input type="text" id="medications" name="medications" class="form-control" required>
+                <label for="medicamentos">Medicamentos</label>
+                <input type="text" id="medicamentos" name="medicamentos" class="form-control" required>
             </div>
             <div class="form-group mb-3">
-                <label for="exams">Exames Solicitados</label>
-                <input type="text" id="exams" name="exams" class="form-control" required>
+                <label for="exames">Exames Solicitados</label>
+                <input type="text" id="exames" name="exames" class="form-control" required>
             </div>
             <div class="form-group mb-3">
-            <label for="return_bool">Retorno</label>
-            <select id="return_bool" name="return_bool" class="form-control" required>
+            <label for="retorno_boolean">Retorno</label>
+            <select id="retorno_boolean" name="retorno_boolean" class="form-control" required>
                 <option value=""></option>
                 <option value="1">Sim</option>
                 <option value="0">Não</option>
             </select>
             
-            <div id="return_date_container" style="display: none;">
-                <label for="return_date">Data de Retorno</label>
-                <input type="date" id="return_date" name="return_date" class="form-control" required>
+            
+            <div id="container_data_retorno" style="display: none;">
+                <label for="data_retorno">Data de Retorno</label>
+                <input type="date" id="data_retorno" name="data_retorno" class="form-control" required>
             </div>
             
             <script>
-                document.getElementById('return_bool').addEventListener('change', function() {
+                document.getElementById('retorno_boolean').addEventListener('change', function() {
                     var returnBoolValue = this.value;
-                    var returnDateContainer = document.getElementById('return_date_container');
+                    var returnDateContainer = document.getElementById('container_data_retorno');
             
                     if (returnBoolValue == '1') {
                         returnDateContainer.style.display = 'block';

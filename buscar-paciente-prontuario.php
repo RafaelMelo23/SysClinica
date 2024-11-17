@@ -4,6 +4,7 @@
 
  
     $nomePaciente = $_GET['nome_paciente'];
+    
 
   
     $sql = "SELECT * FROM paciente WHERE nome_paciente LIKE '%{$nomePaciente}%'";
@@ -16,7 +17,7 @@
     
     
     while ($row = mysqli_fetch_array($result)) {
-        $output[] = $row['nome_paciente'];
+        $output[] = $row['nome_paciente'] . ' - ' . $row['id_paciente'];
     }
 
     
