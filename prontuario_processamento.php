@@ -10,11 +10,28 @@ if (isset($_POST['id_paciente']) && isset($_POST['sintomas']) && isset($_POST['d
     $medicamentos = $_POST['medicamentos'];
     $exames = $_POST['exames'];
     $retorno_boolean = $_POST['retorno_boolean'];
-    $data_retorno = $_POST['data_retorno']; 
+    $data_retorno = !empty($_POST['data_retorno']) ? $_POST['data_retorno'] : null; 
 
-    
-    $sql = "INSERT INTO prontuario (id_paciente, sintomas, diagnostico, medicamentos, exames_solicitados, retorno_boolean, data_retorno) 
-            VALUES ('$id_paciente', '$sintomas', '$diagnostico', '$medicamentos', '$exames', '$retorno_boolean', '$data_retorno')";
+    if (empty($id_paciente)) {
+        die("Erro: ID do paciente não fornecido.");
+    }
+
+    $nome_medico = $_SESSION['nome_medico'];
+    $especialidade_medico = $_SESSION['especialidade_medico'];
+
+    $sql_verificar_paciente = "SELECT * FROM paciente WHERE id_paciente = ?";
+    $stmt = $conn->prepare($sql_verificar_paciente);
+    $stmt->bind_param("i", $id_paciente);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    if ($result->num_rows === 0) {
+        die("Erro: Paciente não encontrado.");
+    }
+
+
+    $sql = "INSERT INTO prontuario (id_paciente, sintomas, diagnostico, medicamentos, exames_solicitados, retorno_boolean, data_retorno, nome_medico, especialidade_medico) 
+            VALUES ('$id_paciente', '$sintomas', '$diagnostico', '$medicamentos', '$exames', '$retorno_boolean', '$data_retorno', '$nome_medico', '$especialidade_medico')";
 
     if ($conn->query($sql) === TRUE) {
         echo "Prontuário cadastrado com sucesso!";
@@ -23,5 +40,6 @@ if (isset($_POST['id_paciente']) && isset($_POST['sintomas']) && isset($_POST['d
     }
 
     $conn->close();
+    
 }
 ?>

@@ -1,29 +1,25 @@
 <?php
+// buscar-paciente-prontuario.php
 
-    include('config.php');
+include 'config.php'; // Inclua a conexão com o banco de dados
 
- 
-    $nomePaciente = $_GET['nome_paciente'];
-    
+$nomePaciente = $_GET['nome_paciente'];
 
-  
-    $sql = "SELECT * FROM paciente WHERE nome_paciente LIKE '%{$nomePaciente}%'";
-    
-  
-    $result = mysqli_query($conn, $sql) or die(json_encode(["Erro" => mysqli_error($conn)]));
+// Execute a consulta para buscar os pacientes com o nome correspondente
+$sql = "SELECT id_paciente, nome_paciente FROM paciente WHERE nome_paciente LIKE ?";
+$stmt = $conn->prepare($sql);
+$searchTerm = "%" . $nomePaciente . "%";
+$stmt->bind_param("s", $searchTerm);
+$stmt->execute();
+$result = $stmt->get_result();
 
- 
-    $output = [];
-    
-    
-    while ($row = mysqli_fetch_array($result)) {
-        $output[] = $row['nome_paciente'] . ' - ' . $row['id_paciente'];
-    }
+// Inicialize um array para armazenar os resultados
+$pacientes = [];
 
-    
-    mysqli_close($conn);
+while ($row = $result->fetch_assoc()) {
+    $pacientes[] = $row; // Adicione cada linha ao array
+}
 
-    
-    echo json_encode($output);
-
+// Retorne os dados em formato JSON
+echo json_encode($pacientes);
 ?>

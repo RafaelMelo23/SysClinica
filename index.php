@@ -51,6 +51,10 @@
 			<li class="nav-item">
 	          <a class="nav-link active" aria-current="page" href="prontuario-medico.php">Prontuário Médico</a>
 	        </li>
+			</li>
+			<li class="nav-item">
+	          <a class="nav-link active" aria-current="page" href="login-medico.php">Login do Médico</a>
+	        </li>
 	        
 	      </ul>
 	      <form class="d-flex" role="search">
@@ -112,6 +116,9 @@
 							break;
 						case 'listar-prontuario':
 							include('listar-prontuario.php');
+							break;
+						case 'login-medico':
+							include('login-medico.php');
 							break;
 						
 						default:

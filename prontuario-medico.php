@@ -11,15 +11,32 @@ session_start();
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
+<style>
+        
+        .top-left {
+            position: absolute;
+            top: 10px; 
+            left: 10px;
+        }
+    </style>
+<div class="container mt-4">
+        
+        <button class="btn btn-primary top-left" onclick="window.history.back();">
+            Voltar
+        </button>
+    </div>
 <div class="container mt-5">
+        
         <h2 class="mb-4">Cadastrar Prontuário</h2>
+        <h4 class="mb-4">Médico: <?php echo $_SESSION['nome_medico']; ?></h3>
         <form method="POST" action="prontuario_processamento.php">
          
         <div class="form-group mb-3">
     <label for="paciente_nome">Nome do Paciente</label>
     <input type="text" id="paciente_nome" name="paciente_nome" class="form-control" placeholder="Digite o nome do paciente" onkeyup="buscarPacientes()" required>
     <select id="paciente_dropdown" name="paciente_dropdown" class="form-control mt-2" style="display: none;" onchange="selecionarPaciente()">
-        
+         
+
     </select>
 </div>
 
@@ -36,39 +53,53 @@ session_start();
         
         // Fazendo a requisição ao script PHP usando fetch
         fetch(`buscar-paciente-prontuario.php?nome_paciente=${encodeURIComponent(nomePaciente)}`)
-            .then(response => response.json())
-            .then(data => {
-                if (data.length > 0) {
-                    dropdown.style.display = 'block';
-                    dropdown.innerHTML = '';
+    .then(response => response.json())
+    .then(data => {
+        if (data.length > 0) {
+            dropdown.style.display = 'block';
+            dropdown.innerHTML = '';
 
-                    // Adicionando opções ao dropdown
-                    data.forEach(nome => {
-                        const option = document.createElement('option');
-                        option.value = nome;
-                        option.textContent = nome;
-                        dropdown.appendChild(option);
-                    });
-                } else {
-                    dropdown.style.display = 'none';
-                    dropdown.innerHTML = '';
-                }
-            })
-            .catch(error => {
-                console.error('Erro ao buscar pacientes:', error);
+            const optionPlaceholder = document.createElement('option');
+            optionPlaceholder.value = '';
+            optionPlaceholder.textContent = '--Selecione um paciente--';
+            dropdown.appendChild(optionPlaceholder);
+
+            data.forEach(paciente => {
+                const option = document.createElement('option');
+                option.value = paciente.id_paciente; // Valor é o ID do paciente
+                option.textContent = paciente.nome_paciente; // Texto exibido é o nome do paciente
+                dropdown.appendChild(option);
+                
             });
+
+            
+            dropdown.onchange = selecionarPaciente;
+        } else {
+            dropdown.style.display = 'none';
+            dropdown.innerHTML = '';
+        }
+    })
+    .catch(error => {
+        console.error('Erro ao buscar pacientes:', error);
+    });
+
     }
 
     function selecionarPaciente() {
-        const dropdown = document.getElementById('paciente_dropdown');
-        const pacienteNomeInput = document.getElementById('paciente_nome');
-        const pacienteIdInput = document.getElementById('id_paciente');
+    const dropdown = document.getElementById('paciente_dropdown');
+    const pacienteNomeInput = document.getElementById('paciente_nome');
+    const pacienteIdInput = document.getElementById('id_paciente');
 
-        // Atualiza o campo de texto com o nome selecionado no dropdown
-        pacienteNomeInput.value = dropdown.value;
-        pacienteIdInput.value = dropdown.value;
-        dropdown.style.display = 'none';
+    if (dropdown.selectedIndex !== -1) {
+
+    
+    pacienteNomeInput.value = dropdown.options[dropdown.selectedIndex].text;
+    pacienteIdInput.value = dropdown.value;
+    console.log(pacienteIdInput.value);
+}
+    dropdown.style.display = 'none';
     }
+
 </script>
 
             <div class="form-group mb-3">
