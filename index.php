@@ -1,3 +1,7 @@
+<?php
+session_start();
+
+?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -48,18 +52,30 @@
 	            <li><a class="dropdown-item" href="?page=listar-consulta">Listar</a></li>
 	          </ul>
 	        </li>
-			<li class="nav-item">
-	          <a class="nav-link active" aria-current="page" href="prontuario-medico.php">Prontuário Médico</a>
-	        </li>
+			<?php if (isset($_SESSION['id_medico'])): ?>
+				<li class="nav-item">
+				<a class="nav-link active" aria-current="page" href="prontuario-medico.php">Prontuário Médico</a>
+				</li>
+			<?php endif; ?>
 			</li>
+			<?php if (!isset($_SESSION['id_medico'])): ?>
 			<li class="nav-item">
 	          <a class="nav-link active" aria-current="page" href="login-medico.php">Login do Médico</a>
 	        </li>
-	        
-	      </ul>
+	        <?php endif; ?>
+			</ul>
+			<ul class="navbar-nav ms-auto">
+			<?php if (isset($_SESSION['id_medico'])): ?>
+				<li class="nav-item">
+				<a class="nav-link active" aria-current="page" href="medico-logout.php">Log out</a>
+				</li>
+			<?php endif; ?>
+			</ul>
+		  
 	      <form class="d-flex" role="search">
 	        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
 	        <button class="btn btn-outline-success" type="submit">Search</button>
+			
 	      </form>
 	    </div>
 	  </div>
@@ -119,6 +135,9 @@
 							break;
 						case 'login-medico':
 							include('login-medico.php');
+							break;
+						case 'medico-logout':
+							include('medico-logout.php');
 							break;
 						
 						default:
