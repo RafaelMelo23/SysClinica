@@ -130,8 +130,8 @@ session_start();
 						case 'prontuario-medico':
 							include('prontuario-medico.php');
 							break;
-						case 'listar-prontuario':
-							include('listar-prontuario.php');
+						case 'prontuario-paciente':
+							include('prontuario-paciente.php');
 							break;
 						case 'login-medico':
 							include('login-medico.php');

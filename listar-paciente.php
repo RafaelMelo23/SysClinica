@@ -65,7 +65,6 @@
                             <td>
                                 <button class='btn btn-success' onclick="location.href='?page=editar-paciente&id_paciente=${paciente.id_paciente}';">Editar</button>
                                 <button class='btn btn-danger' onclick="if(confirm('Tem certeza que deseja excluir?')){location.href='?page=salvar-paciente&acao=excluir&id_paciente=${paciente.id_paciente}';}else{false;}">Excluir</button>
-                                <button class='btn btn-primary' onclick="location.href='?page=prontuario-paciente&id_paciente=${paciente.id_paciente}';">Prontuário</button>
                             </td>
                         `;
                         
