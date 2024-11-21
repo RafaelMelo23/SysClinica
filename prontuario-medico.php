@@ -89,8 +89,23 @@ document.addEventListener("DOMContentLoaded", () => {
     const pacienteDropdown = document.getElementById('paciente_dropdown');
     const consultaDropdown = document.getElementById('consulta_dropdown');
     const idPacienteHidden = document.getElementById('id_paciente');
+    const retornoDropdown = document.getElementById('retorno_boolean');
+    const dataRetornoContainer = document.getElementById('container_data_retorno');
+    const dataRetornoInput = document.getElementById('data_retorno');
 
-    // Limpar dropdown ao digitar algo novo
+    // Controla exibição do campo de data de retorno
+    retornoDropdown.addEventListener("change", () => {
+        if (retornoDropdown.value === "1") {
+            dataRetornoContainer.style.display = 'block'; // Mostra o campo de data
+            dataRetornoInput.setAttribute("required", "required"); // Torna obrigatório
+        } else {
+            dataRetornoContainer.style.display = 'none'; // Esconde o campo de data
+            dataRetornoInput.removeAttribute("required"); // Remove obrigatoriedade
+            dataRetornoInput.value = ''; // Limpa o valor
+        }
+    });
+
+    // Outros eventos como busca de pacientes e consultas...
     pacienteNomeInput.addEventListener("keyup", () => {
         const nome = pacienteNomeInput.value.trim();
         console.log(`[DEBUG] Nome digitado: ${nome}`);
@@ -100,7 +115,6 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
         }
 
-        // Buscar pacientes com o nome digitado
         fetch(`buscar-paciente-prontuario.php?nome_paciente=${encodeURIComponent(nome)}`)
             .then(res => {
                 console.log('[DEBUG] Resposta da busca de pacientes:', res);
@@ -120,40 +134,37 @@ document.addEventListener("DOMContentLoaded", () => {
             .catch(err => console.error("[DEBUG] Erro ao buscar pacientes:", err));
     });
 
-    // Definir ID do paciente ao selecionar no dropdown
     pacienteDropdown.addEventListener("change", () => {
-    const selectedPaciente = pacienteDropdown.value;
-    console.log(`[DEBUG] Paciente selecionado: ${selectedPaciente}`);
-    idPacienteHidden.value = selectedPaciente || ''; // Atualiza o campo oculto com o ID ou o limpa
+        const selectedPaciente = pacienteDropdown.value;
+        console.log(`[DEBUG] Paciente selecionado: ${selectedPaciente}`);
+        idPacienteHidden.value = selectedPaciente || '';
 
-    if (selectedPaciente) {
-        // Buscar consultas do paciente
-        fetch(`buscar-consultas.php?id_paciente=${encodeURIComponent(selectedPaciente)}`)
-            .then(res => {
-                console.log('[DEBUG] Resposta da busca de consultas:', res);
-                if (!res.ok) {
-                    throw new Error(`HTTP Error: ${res.status}`);
-                }
-                return res.json();
-            })
-            .then(data => {
-                console.log('[DEBUG] Consultas recebidas:', data);
+        if (selectedPaciente) {
+            fetch(`buscar-consultas.php?id_paciente=${encodeURIComponent(selectedPaciente)}`)
+                .then(res => {
+                    console.log('[DEBUG] Resposta da busca de consultas:', res);
+                    if (!res.ok) {
+                        throw new Error(`HTTP Error: ${res.status}`);
+                    }
+                    return res.json();
+                })
+                .then(data => {
+                    console.log('[DEBUG] Consultas recebidas:', data);
 
-                // Adiciona a opção inicial e popula com consultas
-                consultaDropdown.innerHTML = `<option value="">--Selecione uma consulta--</option>` + 
-                    (data.error
-                        ? `<option value="">${data.error}</option>`
-                        : data.length
-                            ? data.map(consulta => `<option value="${consulta.id_consulta}">${consulta.data_consulta} - ${consulta.hora_consulta}</option>`).join('')
-                            : `<option value="">Nenhuma consulta encontrada</option>`);
-            })
-            .catch(err => console.error("[DEBUG] Erro ao buscar consultas:", err));
-    } else {
-        consultaDropdown.innerHTML = '<option value="">--Selecione uma consulta--</option>'; // Reseta o dropdown de consultas
-    }
+                    consultaDropdown.innerHTML = `<option value="">--Selecione uma consulta--</option>` + 
+                        (data.error
+                            ? `<option value="">${data.error}</option>`
+                            : data.length
+                                ? data.map(consulta => `<option value="${consulta.id_consulta}">${consulta.data_consulta} - ${consulta.hora_consulta}</option>`).join('')
+                                : `<option value="">Nenhuma consulta encontrada</option>`);
+                })
+                .catch(err => console.error("[DEBUG] Erro ao buscar consultas:", err));
+        } else {
+            consultaDropdown.innerHTML = '<option value="">--Selecione uma consulta--</option>';
+        }
+    });
 });
 
-});
 </script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 </body>

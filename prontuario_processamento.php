@@ -98,12 +98,20 @@ $stmt->bind_param(
 );
 
 if ($stmt->execute()) {
-    print "<script>alert('Prontuário Cadastrado com Sucesso!');</script>";
-    header("Location: prontuario-medico.php");
+    echo "<script>
+            alert('Prontuário Cadastrado com Sucesso!');
+            window.location.href = 'prontuario-medico.php'; // Redireciona após o alerta
+          </script>";
+    exit(); // Adiciona exit() para garantir que o script pare aqui
 } else {
-    print "<script>alert('Erro ao cadastrar prontuário');</script>";
-    header("Location: prontuario-medico.php");
+    echo "<script>
+            alert('Erro ao cadastrar prontuário');
+            window.location.href = 'prontuario-medico.php'; // Redireciona após o alerta
+          </script>";
+    exit(); // Adiciona exit() para garantir que o script pare aqui
 }
+
+
 
 $stmt->close();
 $conn->close();
